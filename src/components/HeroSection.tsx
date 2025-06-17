@@ -6,6 +6,10 @@ const HeroSection = () => {
     window.open('/conteudo-curso', '_blank');
   };
 
+  const handleAccessDashboard = () => {
+    window.open('/dashboard', '_blank');
+  };
+
   return (
     <section className="min-h-screen bg-hero-gradient flex items-center justify-center text-white relative overflow-hidden">
       {/* Background decoration */}
@@ -37,6 +41,15 @@ const HeroSection = () => {
               className="border-white text-white hover:bg-white hover:text-math-blue-700 px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300"
             >
               Ver Conteúdo do Curso
+            </Button>
+
+            <Button 
+              variant="outline" 
+              size="lg" 
+              onClick={handleAccessDashboard}
+              className="border-yellow-300 text-yellow-300 hover:bg-yellow-300 hover:text-math-blue-700 px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300"
+            >
+              Área do Aluno
             </Button>
           </div>
           
