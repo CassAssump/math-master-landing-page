@@ -1,13 +1,15 @@
-
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
+  const navigate = useNavigate();
+
   const handleViewContent = () => {
     window.open('/conteudo-curso', '_blank');
   };
 
   const handleAccessDashboard = () => {
-    window.open('/dashboard', '_blank');
+    navigate('/login');
   };
 
   return (
