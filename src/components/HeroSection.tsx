@@ -2,6 +2,10 @@
 import { Button } from "@/components/ui/button";
 
 const HeroSection = () => {
+  const handleViewContent = () => {
+    window.open('/conteudo-curso', '_blank');
+  };
+
   return (
     <section className="min-h-screen bg-hero-gradient flex items-center justify-center text-white relative overflow-hidden">
       {/* Background decoration */}
@@ -14,8 +18,8 @@ const HeroSection = () => {
           </h1>
           
           <p className="text-xl md:text-2xl mb-8 text-blue-100 max-w-3xl mx-auto leading-relaxed">
-            O curso mais completo de matemática básica do Brasil. Do ensino fundamental ao médio, 
-            com linguagem simples e exemplos práticos que realmente funcionam.
+            Plataforma interativa de matemática básica com exercícios práticos e teoria organizada por tópicos. 
+            Do ensino fundamental ao médio, com linguagem simples que realmente funciona.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
@@ -29,6 +33,7 @@ const HeroSection = () => {
             <Button 
               variant="outline" 
               size="lg" 
+              onClick={handleViewContent}
               className="border-white text-white hover:bg-white hover:text-math-blue-700 px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300"
             >
               Ver Conteúdo do Curso
