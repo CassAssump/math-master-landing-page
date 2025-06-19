@@ -1,15 +1,30 @@
+
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 const HeroSection = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const handleViewContent = () => {
     window.open('/conteudo-curso', '_blank');
   };
 
   const handleAccessDashboard = () => {
-    navigate('/login');
+    if (user) {
+      navigate('/dashboard');
+    } else {
+      navigate('/login');
+    }
+  };
+
+  const handleStartLearning = () => {
+    if (user) {
+      navigate('/dashboard');
+    } else {
+      navigate('/login');
+    }
   };
 
   return (
@@ -31,9 +46,10 @@ const HeroSection = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
             <Button 
               size="lg" 
+              onClick={handleStartLearning}
               className="bg-white text-math-blue-700 hover:bg-gray-100 px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 hover:scale-105 shadow-lg"
             >
-              🚀 Quero Aprender Matemática
+              🚀 {user ? "Ir para Dashboard" : "Quero Aprender Matemática"}
             </Button>
             
             <Button 
@@ -51,7 +67,7 @@ const HeroSection = () => {
               onClick={handleAccessDashboard}
               className="border-yellow-300 text-yellow-300 hover:bg-yellow-300 hover:text-math-blue-700 px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300"
             >
-              Área do Aluno
+              {user ? "Meu Dashboard" : "Área do Aluno"}
             </Button>
           </div>
           

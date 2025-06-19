@@ -1,4 +1,6 @@
 
+import { useEffect, useState } from "react";
+import { Navigate, Link } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,18 +15,53 @@ import {
   SidebarTrigger,
   SidebarInset
 } from "@/components/ui/sidebar";
-import { Home, BookOpen, BarChart3, HelpCircle, LogOut, Play, CheckCircle, Clock } from "lucide-react";
+import { Home, BookOpen, BarChart3, HelpCircle, LogOut, Play, CheckCircle, Clock, User } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+
+interface Profile {
+  full_name: string | null;
+}
 
 const StudentDashboard = () => {
-  const studentName = "João";
+  const { user, signOut, loading } = useAuth();
+  const [profile, setProfile] = useState<Profile | null>(null);
   const overallProgress = 65; // 65% do curso completo
+  
+  // Redirecionar se não estiver logado
+  if (!loading && !user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  useEffect(() => {
+    if (user) {
+      fetchProfile();
+    }
+  }, [user]);
+
+  const fetchProfile = async () => {
+    try {
+      const { data } = await supabase
+        .from('profiles')
+        .select('full_name')
+        .eq('id', user?.id)
+        .single();
+      
+      setProfile(data);
+    } catch (error) {
+      console.error('Erro ao buscar perfil:', error);
+    }
+  };
+
+  const handleLogout = async () => {
+    await signOut();
+  };
   
   const menuItems = [
     { title: "Início", icon: Home, isActive: true },
     { title: "Meus Cursos", icon: BookOpen },
     { title: "Progresso", icon: BarChart3 },
     { title: "Dúvidas", icon: HelpCircle },
-    { title: "Sair", icon: LogOut },
   ];
 
   const courseModules = [
@@ -105,6 +142,19 @@ const StudentDashboard = () => {
     }
   };
 
+  const studentName = profile?.full_name?.split(' ')[0] || "Aluno";
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-math-blue-700 mx-auto"></div>
+          <p className="mt-2 text-gray-600">Carregando...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-gray-50">
@@ -128,6 +178,27 @@ const StudentDashboard = () => {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              
+              <div className="border-t border-gray-200 mt-4 pt-4">
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild className="w-full justify-start">
+                    <Link to="/perfil">
+                      <User className="h-4 w-4" />
+                      <span>Meu Perfil</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    onClick={handleLogout}
+                    className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    <span>Sair</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </div>
             </SidebarMenu>
           </SidebarContent>
         </Sidebar>
@@ -164,7 +235,6 @@ const StudentDashboard = () => {
               </CardContent>
             </Card>
 
-            {/* Módulos do Curso */}
             <div>
               <h2 className="text-xl font-bold mb-4">Módulos do Curso</h2>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

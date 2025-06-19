@@ -6,25 +6,88 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Eye, EyeOff, ArrowLeft, BookOpen } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/use-toast";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
+  
+  const { user, signIn, signUp } = useAuth();
+  const { toast } = useToast();
 
-  const handleLogin = async (e: React.FormEvent) => {
+  // Redirecionar se já estiver logado
+  if (user) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Simular processo de login
-    setTimeout(() => {
+    try {
+      let result;
+      
+      if (isSignUp) {
+        if (!fullName.trim()) {
+          toast({
+            title: "Nome obrigatório",
+            description: "Por favor, informe seu nome completo.",
+            variant: "destructive"
+          });
+          return;
+        }
+        result = await signUp(email, password, fullName);
+        
+        if (!result.error) {
+          toast({
+            title: "Cadastro realizado!",
+            description: "Verifique seu e-mail para confirmar a conta.",
+          });
+        }
+      } else {
+        result = await signIn(email, password);
+        
+        if (!result.error) {
+          toast({
+            title: "Login realizado!",
+            description: "Bem-vindo de volta!",
+          });
+        }
+      }
+      
+      if (result.error) {
+        let errorMessage = "Ocorreu um erro. Tente novamente.";
+        
+        if (result.error.message.includes("Invalid login credentials")) {
+          errorMessage = "E-mail ou senha incorretos.";
+        } else if (result.error.message.includes("User already registered")) {
+          errorMessage = "Este e-mail já está cadastrado. Tente fazer login.";
+        } else if (result.error.message.includes("Password should be at least")) {
+          errorMessage = "A senha deve ter pelo menos 6 caracteres.";
+        }
+        
+        toast({
+          title: isSignUp ? "Erro no cadastro" : "Erro no login",
+          description: errorMessage,
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Erro",
+        description: "Ocorreu um erro inesperado. Tente novamente.",
+        variant: "destructive"
+      });
+    } finally {
       setIsLoading(false);
-      // Redirecionar para o dashboard após login bem-sucedido
-      window.location.href = '/dashboard';
-    }, 1500);
+    }
   };
 
   return (
@@ -50,15 +113,33 @@ const Login = () => {
               </div>
             </div>
             <CardTitle className="text-2xl font-bold text-gray-900">
-              Área do Aluno
+              {isSignUp ? "Criar Conta" : "Área do Aluno"}
             </CardTitle>
             <p className="text-gray-600 mt-2">
-              Entre com suas credenciais para acessar o curso
+              {isSignUp 
+                ? "Crie sua conta para acessar o curso" 
+                : "Entre com suas credenciais para acessar o curso"
+              }
             </p>
           </CardHeader>
 
           <CardContent className="space-y-4">
-            <form onSubmit={handleLogin} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {isSignUp && (
+                <div className="space-y-2">
+                  <Label htmlFor="fullName">Nome Completo</Label>
+                  <Input
+                    id="fullName"
+                    type="text"
+                    placeholder="Seu nome completo"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    required={isSignUp}
+                    className="h-12"
+                  />
+                </div>
+              )}
+
               <div className="space-y-2">
                 <Label htmlFor="email">E-mail</Label>
                 <Input
@@ -78,11 +159,12 @@ const Login = () => {
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
-                    placeholder="Digite sua senha"
+                    placeholder={isSignUp ? "Mínimo 6 caracteres" : "Digite sua senha"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     className="h-12 pr-10"
+                    minLength={isSignUp ? 6 : undefined}
                   />
                   <button
                     type="button"
@@ -98,60 +180,70 @@ const Login = () => {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="remember"
-                    checked={rememberMe}
-                    onCheckedChange={(checked) => setRememberMe(checked as boolean)}
-                  />
-                  <Label htmlFor="remember" className="text-sm text-gray-600">
-                    Lembrar de mim
-                  </Label>
-                </div>
+              {!isSignUp && (
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="remember"
+                      checked={rememberMe}
+                      onCheckedChange={(checked) => setRememberMe(checked as boolean)}
+                    />
+                    <Label htmlFor="remember" className="text-sm text-gray-600">
+                      Lembrar de mim
+                    </Label>
+                  </div>
 
-                <button
-                  type="button"
-                  className="text-sm text-math-blue-700 hover:text-math-blue-800 hover:underline"
-                >
-                  Esqueceu a senha?
-                </button>
-              </div>
+                  <button
+                    type="button"
+                    className="text-sm text-math-blue-700 hover:text-math-blue-800 hover:underline"
+                  >
+                    Esqueceu a senha?
+                  </button>
+                </div>
+              )}
 
               <Button
                 type="submit"
                 className="w-full h-12 bg-math-blue-700 hover:bg-math-blue-800 text-white font-semibold"
                 disabled={isLoading}
               >
-                {isLoading ? "Entrando..." : "Entrar"}
+                {isLoading 
+                  ? (isSignUp ? "Criando conta..." : "Entrando...") 
+                  : (isSignUp ? "Criar Conta" : "Entrar")
+                }
               </Button>
             </form>
 
             <div className="pt-4 border-t border-gray-200">
               <p className="text-center text-sm text-gray-600">
-                Ainda não tem uma conta?{" "}
-                <button className="text-math-blue-700 hover:text-math-blue-800 hover:underline font-semibold">
-                  Cadastre-se aqui
+                {isSignUp ? "Já tem uma conta?" : "Ainda não tem uma conta?"}{" "}
+                <button 
+                  onClick={() => setIsSignUp(!isSignUp)}
+                  className="text-math-blue-700 hover:text-math-blue-800 hover:underline font-semibold"
+                >
+                  {isSignUp ? "Faça login aqui" : "Cadastre-se aqui"}
                 </button>
               </p>
             </div>
 
             <div className="text-center text-xs text-gray-500 pt-2">
-              Ao entrar, você concorda com nossos{" "}
+              Ao {isSignUp ? "criar uma conta" : "entrar"}, você concorda com nossos{" "}
               <button className="hover:underline">Termos de Uso</button> e{" "}
               <button className="hover:underline">Política de Privacidade</button>
             </div>
           </CardContent>
         </Card>
 
-        {/* Demo credentials */}
-        <div className="mt-4 p-4 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
-          <p className="text-white text-sm text-center mb-2 font-semibold">📝 Credenciais de Demonstração</p>
-          <p className="text-white/90 text-xs text-center">
-            <strong>E-mail:</strong> aluno@exemplo.com<br />
-            <strong>Senha:</strong> 123456
-          </p>
-        </div>
+        {/* Demo credentials - only show for login */}
+        {!isSignUp && (
+          <div className="mt-4 p-4 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
+            <p className="text-white text-sm text-center mb-2 font-semibold">📝 Credenciais de Demonstração</p>
+            <p className="text-white/90 text-xs text-center">
+              <strong>E-mail:</strong> aluno@exemplo.com<br />
+              <strong>Senha:</strong> 123456
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
