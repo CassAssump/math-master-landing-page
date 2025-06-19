@@ -56,18 +56,18 @@ const HeroSection = () => {
               variant="outline" 
               size="lg" 
               onClick={handleViewContent}
-              className="border-white text-white hover:bg-white hover:text-math-blue-700 px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300"
+              className="bg-white/90 backdrop-blur-sm border-2 border-white text-math-blue-700 hover:bg-white hover:border-yellow-300 hover:text-math-blue-800 px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 hover:scale-105 shadow-lg"
             >
-              Ver Conteúdo do Curso
+              📚 Ver Conteúdo do Curso
             </Button>
 
             <Button 
               variant="outline" 
               size="lg" 
               onClick={handleAccessDashboard}
-              className="border-yellow-300 text-yellow-300 hover:bg-yellow-300 hover:text-math-blue-700 px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300"
+              className="bg-gradient-to-r from-yellow-400 to-orange-400 border-2 border-yellow-300 text-math-blue-900 hover:from-yellow-300 hover:to-orange-300 hover:border-yellow-200 px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 hover:scale-105 shadow-lg"
             >
-              {user ? "Meu Dashboard" : "Área do Aluno"}
+              👤 {user ? "Meu Dashboard" : "Área do Aluno"}
             </Button>
           </div>
           
