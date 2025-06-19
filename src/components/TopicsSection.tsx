@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
@@ -78,6 +77,10 @@ const TopicsSection = () => {
     }
   ];
 
+  const handleAccessComplete = () => {
+    window.open('https://pay.kiwify.com.br/2FXZZ95', '_blank');
+  };
+
   return (
     <section id="topicos" className="py-20 bg-white">
       <div className="container mx-auto px-4">
@@ -126,6 +129,7 @@ const TopicsSection = () => {
             </p>
             <Button 
               size="lg" 
+              onClick={handleAccessComplete}
               className="bg-white text-math-blue-700 hover:bg-gray-100 px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 hover:scale-105"
             >
               Quero Ter Acesso Completo
