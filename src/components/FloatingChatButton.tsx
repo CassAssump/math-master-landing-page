@@ -1,9 +1,8 @@
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
 
+// --- DEFINIÇÃO DA INTERFACE DA MENSAGEM ---
 interface Message {
   id: string;
   content: string;
@@ -11,24 +10,27 @@ interface Message {
   timestamp: Date;
 }
 
+// --- O COMPONENTE DO CHATBOT ---
 const FloatingChatButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
+  
+  // Ref para a área de mensagens, para rolar para baixo automaticamente
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // Efeito para rolar para a última mensagem sempre que a lista de mensagens mudar
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+
+  // --- FUNÇÃO PRINCIPAL PARA ENVIAR A MENSAGEM ---
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!message.trim()) {
-      toast({
-        title: "Erro",
-        description: "Por favor, digite sua dúvida antes de enviar.",
-        variant: "destructive",
-      });
-      return;
-    }
+    if (!message.trim()) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -41,9 +43,8 @@ const FloatingChatButton = () => {
     setIsLoading(true);
     setMessage('');
 
-    console.log("Enviando dúvida para o webhook:", userMessage.content);
-
     try {
+      // A chamada para o webhook continua a mesma
       const response = await fetch('https://hook.us2.make.com/abso0k9oeikgcqqkephdcnc7vtv8lo', {
         method: "POST",
         headers: {
@@ -58,21 +59,24 @@ const FloatingChatButton = () => {
       });
 
       if (response.ok) {
-        const responseData = await response.text();
+        // --- MUDANÇA PRINCIPAL AQUI ---
+        // 1. Lemos a resposta como JSON, e não como texto.
+        const responseData = await response.json(); 
         
+        // 2. Pegamos a resposta da IA de dentro da chave 'reply'.
+        //    (Certifique-se de que no seu módulo 'Webhook response' no Make, 
+        //    o Body está configurado como {"reply": "{{resposta_da_ia}}"})
+        const botReplyContent = responseData.reply || "Recebi sua mensagem, mas não consegui processar a resposta.";
+
         const botMessage: Message = {
           id: (Date.now() + 1).toString(),
-          content: responseData || "Resposta recebida com sucesso!",
+          content: botReplyContent, // Usamos a resposta limpa aqui
           isUser: false,
           timestamp: new Date(),
         };
 
         setMessages(prev => [...prev, botMessage]);
-        
-        toast({
-          title: "Resposta Recebida!",
-          description: "Nossa equipe respondeu sua dúvida.",
-        });
+
       } else {
         throw new Error('Falha na resposta do webhook');
       }
@@ -87,43 +91,36 @@ const FloatingChatButton = () => {
       };
 
       setMessages(prev => [...prev, errorMessage]);
-      
-      toast({
-        title: "Erro",
-        description: "Não foi possível enviar sua dúvida. Tente novamente.",
-        variant: "destructive",
-      });
     } finally {
       setIsLoading(false);
     }
   };
 
+  // --- RENDERIZAÇÃO DO COMPONENTE (JSX) ---
   return (
     <>
-      {/* Chat Window */}
+      {/* Janela do Chat */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 w-80 bg-white rounded-lg shadow-2xl border border-gray-200 z-40 animate-fade-in">
-          <div className="bg-math-gradient text-white p-4 rounded-t-lg flex items-center justify-between">
+        <div className="fixed bottom-24 right-6 w-80 max-w-[90vw] bg-white rounded-lg shadow-2xl border border-gray-200 z-40 animate-fade-in">
+          <div className="bg-blue-600 text-white p-4 rounded-t-lg flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <MessageCircle size={20} />
-              <span className="font-semibold">Tire suas Dúvidas</span>
+              <span className="font-semibold">Assistente MathFácil</span>
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
+            <button
               onClick={() => setIsOpen(false)}
-              className="text-white hover:bg-white/20 p-1 h-auto"
+              className="text-white hover:bg-white/20 p-1 rounded-full h-auto"
             >
               <X size={16} />
-            </Button>
+            </button>
           </div>
           
           <div className="flex flex-col h-96">
-            {/* Messages Area */}
-            <div className="flex-1 p-4 overflow-y-auto space-y-3">
+            {/* Área de Mensagens */}
+            <div className="flex-1 p-4 overflow-y-auto space-y-4">
               {messages.length === 0 && (
-                <p className="text-sm text-gray-500 text-center">
-                  Faça sua primeira pergunta sobre matemática!
+                <p className="text-sm text-gray-500 text-center pt-4">
+                  Olá! Como posso ajudar com os nossos planos e o curso MathFácil?
                 </p>
               )}
               
@@ -133,18 +130,15 @@ const FloatingChatButton = () => {
                   className={`flex ${msg.isUser ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`max-w-[80%] p-3 rounded-lg text-sm ${
+                    className={`max-w-[85%] p-3 rounded-2xl text-sm ${
                       msg.isUser
-                        ? 'bg-math-gradient text-white rounded-br-none'
+                        ? 'bg-blue-600 text-white rounded-br-none'
                         : 'bg-gray-100 text-gray-800 rounded-bl-none'
                     }`}
                   >
-                    <p>{msg.content}</p>
-                    <p className={`text-xs mt-1 ${msg.isUser ? 'text-white/70' : 'text-gray-500'}`}>
-                      {msg.timestamp.toLocaleTimeString('pt-BR', { 
-                        hour: '2-digit', 
-                        minute: '2-digit' 
-                      })}
+                    <p className="whitespace-pre-wrap">{msg.content}</p>
+                    <p className={`text-xs mt-1 text-right ${msg.isUser ? 'text-white/70' : 'text-gray-400'}`}>
+                      {msg.timestamp.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
                     </p>
                   </div>
                 </div>
@@ -152,8 +146,8 @@ const FloatingChatButton = () => {
               
               {isLoading && (
                 <div className="flex justify-start">
-                  <div className="bg-gray-100 p-3 rounded-lg rounded-bl-none max-w-[80%]">
-                    <div className="flex items-center space-x-2">
+                  <div className="bg-gray-100 p-3 rounded-2xl rounded-bl-none">
+                    <div className="flex items-center space-x-1.5">
                       <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
                       <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
                       <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
@@ -161,16 +155,17 @@ const FloatingChatButton = () => {
                   </div>
                 </div>
               )}
+               <div ref={messagesEndRef} />
             </div>
             
-            {/* Input Area */}
-            <div className="p-4 border-t border-gray-200">
-              <form onSubmit={handleSendMessage} className="space-y-3">
-                <textarea
+            {/* Área de Input */}
+            <div className="p-3 border-t border-gray-200 bg-white">
+              <form onSubmit={handleSendMessage} className="flex items-center space-x-2">
+                <input
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Digite sua dúvida aqui..."
-                  className="w-full p-3 border border-gray-300 rounded-lg resize-none h-20 text-sm focus:outline-none focus:ring-2 focus:ring-math-blue-500"
+                  placeholder="Digite sua dúvida..."
+                  className="w-full p-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                   disabled={isLoading}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' && !e.shiftKey) {
@@ -180,38 +175,32 @@ const FloatingChatButton = () => {
                   }}
                 />
                 
-                <Button
+                <button
                   type="submit"
                   disabled={isLoading || !message.trim()}
-                  className="w-full bg-math-gradient hover:opacity-90 text-white"
+                  className="p-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white disabled:bg-gray-300 transition-colors"
                 >
-                  {isLoading ? (
-                    <div className="flex items-center space-x-2">
-                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      <span>Enviando...</span>
-                    </div>
-                  ) : (
-                    <div className="flex items-center space-x-2">
-                      <Send size={16} />
-                      <span>Enviar Dúvida</span>
-                    </div>
-                  )}
-                </Button>
+                   {isLoading ? (
+                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                   ) : (
+                     <Send size={20} />
+                   )}
+                </button>
               </form>
             </div>
           </div>
         </div>
       )}
 
-      {/* Floating Button */}
-      <Button
+      {/* Botão Flutuante */}
+      <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`fixed bottom-6 right-6 w-14 h-14 rounded-full bg-math-gradient hover:opacity-90 shadow-lg z-50 transition-all duration-300 ${
-          isOpen ? 'rotate-180' : 'hover:scale-110'
+        className={`fixed bottom-6 right-6 w-14 h-14 rounded-full bg-blue-600 hover:bg-blue-700 text-white shadow-lg z-50 flex items-center justify-center transition-all duration-300 ${
+          isOpen ? 'rotate-[360deg] scale-90' : 'hover:scale-110'
         }`}
       >
-        {isOpen ? <X size={24} className="text-white" /> : <MessageCircle size={24} className="text-white" />}
-      </Button>
+        {isOpen ? <X size={24} /> : <MessageCircle size={24} />}
+      </button>
     </>
   );
 };
