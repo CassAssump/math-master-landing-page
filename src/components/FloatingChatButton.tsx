@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send } from 'lucide-react';
 
-// --- DEFINIÇÃO DA INTERFACE DA MENSAGEM ---
+// A interface para cada mensagem na conversa
 interface Message {
   id: string;
   content: string;
@@ -10,28 +10,27 @@ interface Message {
   timestamp: Date;
 }
 
-// --- O COMPONENTE DO CHATBOT ---
+// O componente principal do chatbot
 const FloatingChatButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   
-  // Ref para a área de mensagens, para rolar para baixo automaticamente
+  // Referência para o final da lista de mensagens, para rolar automaticamente
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Efeito para rolar para a última mensagem sempre que a lista de mensagens mudar
+  // Efeito que "rola" a tela para a última mensagem sempre que a lista é atualizada
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages, isLoading]);
 
-
-  // --- FUNÇÃO PRINCIPAL PARA ENVIAR A MENSAGEM ---
+  // Função principal para enviar a pergunta do usuário para o webhook
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!message.trim()) return;
 
+    // Cria a mensagem do usuário e a adiciona na tela
     const userMessage: Message = {
       id: Date.now().toString(),
       content: message.trim(),
@@ -44,59 +43,53 @@ const FloatingChatButton = () => {
     setMessage('');
 
     try {
-      // A chamada para o webhook continua a mesma
+      // Envia os dados para a URL do seu webhook no Make.com
       const response = await fetch('https://hook.us2.make.com/abso0k9oeikgcqqkephdcnc7vtv8lo', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          question: userMessage.content,
-          timestamp: new Date().toISOString(),
-          source: "website_chat",
-          url: window.location.href,
-        }),
+        body: JSON.stringify({ question: userMessage.content }),
       });
 
       if (response.ok) {
-        // --- MUDANÇA PRINCIPAL AQUI ---
-        // 1. Lemos a resposta como JSON, e não como texto.
+        // --- MUDANÇA CRÍTICA AQUI ---
+        // 1. Lemos a resposta como um objeto JSON, e não como texto.
         const responseData = await response.json(); 
         
-        // 2. Pegamos a resposta da IA de dentro da chave 'reply'.
-        //    (Certifique-se de que no seu módulo 'Webhook response' no Make, 
-        //    o Body está configurado como {"reply": "{{resposta_da_ia}}"})
-        const botReplyContent = responseData.reply || "Recebi sua mensagem, mas não consegui processar a resposta.";
+        // 2. Pegamos a resposta da IA de dentro da chave 'reply' do objeto.
+        const botReplyContent = responseData.reply || "Resposta recebida, mas em um formato inesperado.";
 
+        // Cria a mensagem do bot e a adiciona na tela
         const botMessage: Message = {
           id: (Date.now() + 1).toString(),
-          content: botReplyContent, // Usamos a resposta limpa aqui
+          content: botReplyContent,
           isUser: false,
           timestamp: new Date(),
         };
-
         setMessages(prev => [...prev, botMessage]);
 
       } else {
-        throw new Error('Falha na resposta do webhook');
+        // Se a resposta do webhook não for 'OK' (ex: erro 500 no Make), lança um erro.
+        throw new Error('O webhook retornou uma resposta com erro.');
       }
     } catch (error) {
-      console.error("Erro ao enviar dúvida:", error);
+      console.error("Erro na comunicação com o webhook:", error);
       
+      // Cria uma mensagem de erro padrão e a adiciona na tela
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         content: "Desculpe, não foi possível processar sua dúvida no momento. Tente novamente mais tarde.",
         isUser: false,
         timestamp: new Date(),
       };
-
       setMessages(prev => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
   };
 
-  // --- RENDERIZAÇÃO DO COMPONENTE (JSX) ---
+  // --- RENDERIZAÇÃO DO COMPONENTE (APARÊNCIA) ---
   return (
     <>
       {/* Janela do Chat */}
@@ -107,16 +100,12 @@ const FloatingChatButton = () => {
               <MessageCircle size={20} />
               <span className="font-semibold">Assistente MathFácil</span>
             </div>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="text-white hover:bg-white/20 p-1 rounded-full h-auto"
-            >
+            <button onClick={() => setIsOpen(false)} className="text-white hover:bg-white/20 p-1 rounded-full h-auto">
               <X size={16} />
             </button>
           </div>
           
           <div className="flex flex-col h-96">
-            {/* Área de Mensagens */}
             <div className="flex-1 p-4 overflow-y-auto space-y-4">
               {messages.length === 0 && (
                 <p className="text-sm text-gray-500 text-center pt-4">
@@ -125,15 +114,10 @@ const FloatingChatButton = () => {
               )}
               
               {messages.map((msg) => (
-                <div
-                  key={msg.id}
-                  className={`flex ${msg.isUser ? 'justify-end' : 'justify-start'}`}
-                >
+                <div key={msg.id} className={`flex ${msg.isUser ? 'justify-end' : 'justify-start'}`}>
                   <div
                     className={`max-w-[85%] p-3 rounded-2xl text-sm ${
-                      msg.isUser
-                        ? 'bg-blue-600 text-white rounded-br-none'
-                        : 'bg-gray-100 text-gray-800 rounded-bl-none'
+                      msg.isUser ? 'bg-blue-600 text-white rounded-br-none' : 'bg-gray-100 text-gray-800 rounded-bl-none'
                     }`}
                   >
                     <p className="whitespace-pre-wrap">{msg.content}</p>
@@ -158,7 +142,6 @@ const FloatingChatButton = () => {
                <div ref={messagesEndRef} />
             </div>
             
-            {/* Área de Input */}
             <div className="p-3 border-t border-gray-200 bg-white">
               <form onSubmit={handleSendMessage} className="flex items-center space-x-2">
                 <input
