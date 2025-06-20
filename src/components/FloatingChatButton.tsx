@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send } from 'lucide-react';
 
@@ -43,8 +42,8 @@ const FloatingChatButton = () => {
     setMessage('');
 
     try {
-      // Envia os dados para a URL do seu webhook no Make.com
-      const response = await fetch('https://hook.us2.make.com/abso0k9oeikgcqqkephdcnc7vtv8lo', {
+      // Envia os dados para a URL atualizada do seu webhook no Make.com
+      const response = await fetch('https://hook.us2.make.com/abso0k9oeikgcqqkephdcnc7vtv8loif', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -53,11 +52,10 @@ const FloatingChatButton = () => {
       });
 
       if (response.ok) {
-        // --- MUDANÇA CRÍTICA AQUI ---
-        // 1. Lemos a resposta como um objeto JSON, e não como texto.
+        // Lê a resposta como um objeto JSON
         const responseData = await response.json(); 
         
-        // 2. Pegamos a resposta da IA de dentro da chave 'reply' do objeto.
+        // Pega a resposta da IA de dentro da chave 'reply' do objeto
         const botReplyContent = responseData.reply || "Resposta recebida, mas em um formato inesperado.";
 
         // Cria a mensagem do bot e a adiciona na tela
