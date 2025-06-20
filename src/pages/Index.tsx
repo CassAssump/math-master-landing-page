@@ -5,6 +5,7 @@ import BenefitsSection from "@/components/BenefitsSection";
 import TopicsSection from "@/components/TopicsSection";
 import TestimonialSection from "@/components/TestimonialSection";
 import Footer from "@/components/Footer";
+import FloatingChatButton from "@/components/FloatingChatButton";
 
 const Index = () => {
   return (
@@ -15,6 +16,7 @@ const Index = () => {
       <TopicsSection />
       <TestimonialSection />
       <Footer />
+      <FloatingChatButton />
     </div>
   );
 };
