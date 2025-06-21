@@ -43,7 +43,7 @@ const FloatingChatButton = () => {
 
     try {
       // Envia os dados para a URL atualizada do seu webhook no Make.com
-      const response = await fetch('https://hook.us2.make.com/abso0k9oeikgcqqkephdcnc7vtv8loif', {
+      const response = await fetch('https://hook.us2.make.com/abso0k9oeikgcqqkephdcnc7vtv8loif?http_method=POST', {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
