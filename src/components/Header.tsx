@@ -2,6 +2,10 @@
 import { Button } from "@/components/ui/button";
 
 const Header = () => {
+  const handlePurchase = () => {
+    window.open('https://pay.hotmart.com/B100450509A', '_blank');
+  };
+
   return (
     <header className="bg-white/90 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4">
@@ -28,7 +32,10 @@ const Header = () => {
             </a>
           </nav>
           
-          <Button className="bg-math-gradient hover:opacity-90 text-white px-6 py-2 rounded-full font-semibold transition-all duration-300 hover:scale-105">
+          <Button 
+            onClick={handlePurchase}
+            className="bg-math-gradient hover:opacity-90 text-white px-6 py-2 rounded-full font-semibold transition-all duration-300 hover:scale-105"
+          >
             Inscreva-se Agora
           </Button>
         </div>

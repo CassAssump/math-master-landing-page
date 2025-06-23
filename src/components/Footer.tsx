@@ -3,6 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const Footer = () => {
+  const handlePurchase = () => {
+    window.open('https://pay.hotmart.com/B100450509A', '_blank');
+  };
+
   return (
     <footer className="bg-gray-900 text-white">
       {/* Pricing Section */}
@@ -46,7 +50,10 @@ const Footer = () => {
                     Suporte 24/7
                   </li>
                 </ul>
-                <Button className="w-full bg-math-blue-700 hover:bg-math-blue-800 text-white font-bold py-3 rounded-full">
+                <Button 
+                  onClick={handlePurchase}
+                  className="w-full bg-math-blue-700 hover:bg-math-blue-800 text-white font-bold py-3 rounded-full"
+                >
                   Escolher Plano Aluno
                 </Button>
               </CardContent>
@@ -115,6 +122,7 @@ const Footer = () => {
           </p>
           <Button 
             size="lg" 
+            onClick={handlePurchase}
             className="bg-white text-math-blue-700 hover:bg-gray-100 px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 hover:scale-105 shadow-lg"
           >
             🚀 Comece Agora - Oferta Especial
