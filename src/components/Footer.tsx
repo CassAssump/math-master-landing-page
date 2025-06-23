@@ -7,6 +7,10 @@ const Footer = () => {
     window.open('https://pay.hotmart.com/B100450509A', '_blank');
   };
 
+  const handleProfessorPurchase = () => {
+    window.open('https://pay.hotmart.com/B100450509A?off=nuf2bm6x', '_blank');
+  };
+
   return (
     <footer className="bg-gray-900 text-white">
       {/* Pricing Section */}
@@ -98,7 +102,10 @@ const Footer = () => {
                     Relatórios de progresso
                   </li>
                 </ul>
-                <Button className="w-full bg-math-blue-900 hover:bg-math-blue-800 text-white font-bold py-3 rounded-full">
+                <Button 
+                  onClick={handleProfessorPurchase}
+                  className="w-full bg-math-blue-900 hover:bg-math-blue-800 text-white font-bold py-3 rounded-full"
+                >
                   Escolher Plano Professor
                 </Button>
               </CardContent>
