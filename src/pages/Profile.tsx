@@ -25,7 +25,7 @@ const Profile = () => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [loadingProfile, setLoadingProfile] = useState(true);
 
-  // Redirecionar se não estiver logado
+  // Redirect if not logged in
   if (!loading && !user) {
     return <Navigate to="/login" replace />;
   }
@@ -45,10 +45,10 @@ const Profile = () => {
         .single();
 
       if (error) {
-        console.error('Erro ao buscar perfil:', error);
+        console.error('Error fetching profile:', error);
         toast({
-          title: "Erro",
-          description: "Não foi possível carregar seu perfil.",
+          title: "Error",
+          description: "Could not load your profile.",
           variant: "destructive"
         });
       } else {
@@ -56,7 +56,7 @@ const Profile = () => {
         setFullName(data.full_name || "");
       }
     } catch (error) {
-      console.error('Erro ao buscar perfil:', error);
+      console.error('Error fetching profile:', error);
     } finally {
       setLoadingProfile(false);
     }
@@ -77,21 +77,21 @@ const Profile = () => {
 
       if (error) {
         toast({
-          title: "Erro",
-          description: "Não foi possível atualizar seu perfil.",
+          title: "Error",
+          description: "Could not update your profile.",
           variant: "destructive"
         });
       } else {
         toast({
-          title: "Perfil atualizado!",
-          description: "Suas informações foram salvas com sucesso.",
+          title: "Profile updated!",
+          description: "Your information has been saved successfully.",
         });
-        fetchProfile(); // Recarregar dados
+        fetchProfile(); // Reload data
       }
     } catch (error) {
       toast({
-        title: "Erro",
-        description: "Ocorreu um erro inesperado.",
+        title: "Error",
+        description: "An unexpected error occurred.",
         variant: "destructive"
       });
     } finally {
@@ -102,8 +102,8 @@ const Profile = () => {
   const handleSignOut = async () => {
     await signOut();
     toast({
-      title: "Logout realizado",
-      description: "Você foi desconectado com sucesso.",
+      title: "Logged out",
+      description: "You have been logged out successfully.",
     });
   };
 
@@ -112,7 +112,7 @@ const Profile = () => {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-math-blue-700 mx-auto"></div>
-          <p className="mt-2 text-gray-600">Carregando...</p>
+          <p className="mt-2 text-gray-600">Loading...</p>
         </div>
       </div>
     );
@@ -128,7 +128,7 @@ const Profile = () => {
             className="inline-flex items-center text-math-blue-700 hover:text-math-blue-800 transition-colors"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Voltar ao Dashboard
+            Back to Dashboard
           </Link>
 
           <Button 
@@ -137,7 +137,7 @@ const Profile = () => {
             className="text-red-600 border-red-600 hover:bg-red-50"
           >
             <LogOut className="h-4 w-4 mr-2" />
-            Sair
+            Sign Out
           </Button>
         </div>
 
@@ -150,21 +150,21 @@ const Profile = () => {
               </div>
             </div>
             <CardTitle className="text-2xl font-bold text-gray-900">
-              Meu Perfil
+              My Profile
             </CardTitle>
             <p className="text-gray-600 mt-2">
-              Gerencie suas informações pessoais
+              Manage your personal information
             </p>
           </CardHeader>
 
           <CardContent className="space-y-6">
             <form onSubmit={updateProfile} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="fullName">Nome Completo</Label>
+                <Label htmlFor="fullName">Full Name</Label>
                 <Input
                   id="fullName"
                   type="text"
-                  placeholder="Seu nome completo"
+                  placeholder="Your full name"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   className="h-12"
@@ -172,7 +172,7 @@ const Profile = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email">E-mail</Label>
+                <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
                   type="email"
@@ -181,7 +181,7 @@ const Profile = () => {
                   className="h-12 bg-gray-50"
                 />
                 <p className="text-xs text-gray-500">
-                  O e-mail não pode ser alterado por questões de segurança.
+                  Email cannot be changed for security reasons.
                 </p>
               </div>
 
@@ -190,23 +190,23 @@ const Profile = () => {
                 className="w-full h-12 bg-math-blue-700 hover:bg-math-blue-800 text-white font-semibold"
                 disabled={isUpdating}
               >
-                {isUpdating ? "Salvando..." : "Salvar Alterações"}
+                {isUpdating ? "Saving..." : "Save Changes"}
               </Button>
             </form>
 
             {/* Account Info */}
             <div className="pt-6 border-t border-gray-200">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                Informações da Conta
+                Account Information
               </h3>
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">ID do Usuário:</span>
+                  <span className="text-gray-600">User ID:</span>
                   <span className="font-mono text-xs">{profile?.id}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Conta criada em:</span>
-                  <span>{new Date(profile?.created_at || "").toLocaleDateString('pt-BR')}</span>
+                  <span className="text-gray-600">Account created on:</span>
+                  <span>{new Date(profile?.created_at || "").toLocaleDateString('en-US')}</span>
                 </div>
               </div>
             </div>
