@@ -5,33 +5,33 @@ const BenefitsSection = () => {
   const benefits = [
     {
       icon: "🎯",
-      title: "Linguagem Simples",
-      description: "Explicações claras e diretas, sem complicação. Matemática explicada de forma que qualquer um entende."
+      title: "Simple Language",
+      description: "Clear and direct explanations, without complications. Mathematics explained in a way that anyone can understand."
     },
     {
       icon: "📹",
-      title: "Videoaulas Didáticas",
-      description: "Mais de 100 videoaulas com exemplos práticos do dia a dia para fixar o aprendizado."
+      title: "Educational Video Lessons",
+      description: "Over 100 video lessons with practical everyday examples to reinforce learning."
     },
     {
       icon: "💡",
-      title: "Exemplos Práticos",
-      description: "Aprenda matemática com situações reais: calcular descontos, juros, medidas e muito mais."
+      title: "Practical Examples",
+      description: "Learn mathematics with real-life situations: calculating discounts, interest, measurements and much more."
     },
     {
       icon: "📱",
-      title: "Acesso Vitalício",
-      description: "Estude quando e onde quiser. Acesso pelo computador, tablet ou celular, sem prazo para acabar."
+      title: "Lifetime Access",
+      description: "Study whenever and wherever you want. Access via computer, tablet or phone, with no expiration date."
     },
     {
       icon: "🏆",
-      title: "Certificado de Conclusão",
-      description: "Receba seu certificado digital ao concluir o curso e comprove seu conhecimento."
+      title: "Certificate of Completion",
+      description: "Receive your digital certificate upon course completion and prove your knowledge."
     },
     {
       icon: "👨‍🏫",
-      title: "Professor Especialista",
-      description: "Aprenda com quem tem mais de 10 anos de experiência ensinando matemática de forma descomplicada."
+      title: "Expert Teacher",
+      description: "Learn from someone with over 10 years of experience teaching mathematics in an uncomplicated way."
     }
   ];
 
@@ -40,10 +40,10 @@ const BenefitsSection = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
-            Por Que Escolher o <span className="text-math-blue-600">MathFácil</span>?
+            Why Choose <span className="text-math-blue-600">MathFácil</span>?
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Descubra os diferenciais que fazem do nosso curso a melhor escolha para dominar a matemática
+            Discover the advantages that make our course the best choice for mastering mathematics
           </p>
         </div>
         

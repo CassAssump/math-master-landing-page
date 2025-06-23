@@ -19,16 +19,16 @@ const Header = () => {
           
           <nav className="hidden md:flex items-center space-x-8">
             <a href="#curso" className="text-gray-600 hover:text-math-blue-600 transition-colors">
-              O Curso
+              The Course
             </a>
             <a href="#beneficios" className="text-gray-600 hover:text-math-blue-600 transition-colors">
-              Benefícios
+              Benefits
             </a>
             <a href="#topicos" className="text-gray-600 hover:text-math-blue-600 transition-colors">
-              Conteúdo
+              Content
             </a>
             <a href="#depoimento" className="text-gray-600 hover:text-math-blue-600 transition-colors">
-              Depoimentos
+              Testimonials
             </a>
           </nav>
           
@@ -36,7 +36,7 @@ const Header = () => {
             onClick={handlePurchase}
             className="bg-math-gradient hover:opacity-90 text-white px-6 py-2 rounded-full font-semibold transition-all duration-300 hover:scale-105"
           >
-            Inscreva-se Agora
+            Enroll Now
           </Button>
         </div>
       </div>

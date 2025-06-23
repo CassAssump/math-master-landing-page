@@ -1,78 +1,79 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
 const TopicsSection = () => {
   const topics = [
     {
-      category: "Fundamentos",
+      category: "Fundamentals",
       items: [
-        "Operações básicas (soma, subtração, multiplicação, divisão)",
-        "Números inteiros, decimais e frações",
-        "Propriedades das operações",
-        "Ordem das operações matemáticas"
+        "Basic operations (addition, subtraction, multiplication, division)",
+        "Integers, decimals and fractions",
+        "Properties of operations",
+        "Order of mathematical operations"
       ]
     },
     {
-      category: "Frações e Decimais",
+      category: "Fractions and Decimals",
       items: [
-        "Conceitos fundamentais de frações",
-        "Operações com frações",
-        "Conversão entre frações e decimais",
-        "Frações equivalentes e simplificação"
+        "Fundamental concepts of fractions",
+        "Operations with fractions",
+        "Conversion between fractions and decimals",
+        "Equivalent fractions and simplification"
       ]
     },
     {
-      category: "Potenciação e Radiciação",
+      category: "Exponentiation and Roots",
       items: [
-        "Conceitos de potência e raiz",
-        "Propriedades da potenciação",
-        "Notação científica",
-        "Raiz quadrada e cúbica"
+        "Concepts of power and root",
+        "Properties of exponentiation",
+        "Scientific notation",
+        "Square and cube root"
       ]
     },
     {
-      category: "Porcentagem",
+      category: "Percentage",
       items: [
-        "Conceito e cálculos básicos",
-        "Porcentagem de desconto e acréscimo",
-        "Regra de três simples e composta",
-        "Aplicações práticas do dia a dia"
+        "Basic concepts and calculations",
+        "Discount and markup percentages",
+        "Simple and compound rule of three",
+        "Practical everyday applications"
       ]
     },
     {
-      category: "Álgebra",
+      category: "Algebra",
       items: [
-        "Expressões algébricas",
-        "Equações do 1º e 2º grau",
-        "Sistemas de equações",
-        "Inequações básicas"
+        "Algebraic expressions",
+        "First and second degree equations",
+        "Systems of equations",
+        "Basic inequalities"
       ]
     },
     {
-      category: "Razão e Proporção",
+      category: "Ratio and Proportion",
       items: [
-        "Conceitos de razão e proporção",
-        "Propriedades das proporções",
-        "Regra de três simples e composta",
-        "Grandezas diretamente e inversamente proporcionais"
+        "Concepts of ratio and proportion",
+        "Properties of proportions",
+        "Simple and compound rule of three",
+        "Directly and inversely proportional quantities"
       ]
     },
     {
-      category: "Funções",
+      category: "Functions",
       items: [
-        "Conceito de função",
-        "Função do 1º grau (linear)",
-        "Função do 2º grau (quadrática)",
-        "Gráficos e interpretação"
+        "Function concept",
+        "First degree function (linear)",
+        "Second degree function (quadratic)",
+        "Graphs and interpretation"
       ]
     },
     {
-      category: "Geometria Básica",
+      category: "Basic Geometry",
       items: [
-        "Figuras planas e espaciais",
-        "Perímetro e área de figuras",
-        "Volume de sólidos geométricos",
-        "Teorema de Pitágoras"
+        "Plane and spatial figures",
+        "Perimeter and area of figures",
+        "Volume of geometric solids",
+        "Pythagorean theorem"
       ]
     }
   ];
@@ -86,10 +87,10 @@ const TopicsSection = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
-            Conteúdo Completo do <span className="text-math-green-600">Curso</span>
+            Complete <span className="text-math-green-600">Course</span> Content
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Tudo que você precisa saber sobre matemática básica, organizado de forma lógica e progressiva
+            Everything you need to know about basic mathematics, organized logically and progressively
           </p>
         </div>
         
@@ -123,16 +124,16 @@ const TopicsSection = () => {
         
         <div className="text-center">
           <div className="bg-math-gradient rounded-2xl p-8 max-w-4xl mx-auto text-white">
-            <h3 className="text-2xl font-bold mb-4">🎯 Mais de 50 Horas de Conteúdo</h3>
+            <h3 className="text-2xl font-bold mb-4">🎯 Over 50 Hours of Content</h3>
             <p className="text-lg mb-6 opacity-90">
-              Videoaulas + Exercícios + Material de Apoio + Suporte Completo
+              Video Lessons + Exercises + Support Materials + Complete Support
             </p>
             <Button 
               size="lg" 
               onClick={handleAccessComplete}
               className="bg-white text-math-blue-700 hover:bg-gray-100 px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 hover:scale-105"
             >
-              Quero Ter Acesso Completo
+              I Want Complete Access
             </Button>
           </div>
         </div>

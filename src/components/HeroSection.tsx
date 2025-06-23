@@ -18,12 +18,12 @@ const HeroSection = () => {
       <div className="container mx-auto px-4 text-center relative z-10">
         <div className="max-w-4xl mx-auto animate-fade-in">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-            Domine a <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">Matemática</span> de Uma Vez Por Todas!
+            Master <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">Mathematics</span> Once and For All!
           </h1>
           
           <p className="text-xl md:text-2xl mb-8 text-blue-100 max-w-3xl mx-auto leading-relaxed">
-            Plataforma interativa de matemática básica com exercícios práticos e teoria organizada por tópicos. 
-            Do ensino fundamental ao médio, com linguagem simples que realmente funciona.
+            Interactive basic mathematics platform with practical exercises and theory organized by topics. 
+            From elementary to high school, with simple language that really works.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
@@ -32,22 +32,22 @@ const HeroSection = () => {
               onClick={handleGuaranteeAccess}
               className="bg-white text-math-blue-700 hover:bg-gray-100 px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 hover:scale-105 shadow-lg"
             >
-              🚀 Quero Garantir
+              🚀 I Want to Secure It
             </Button>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
               <div className="text-3xl font-bold text-yellow-300">100+</div>
-              <div className="text-sm text-blue-100">Videoaulas</div>
+              <div className="text-sm text-blue-100">Video Lessons</div>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
               <div className="text-3xl font-bold text-yellow-300">50+</div>
-              <div className="text-sm text-blue-100">Exercícios</div>
+              <div className="text-sm text-blue-100">Exercises</div>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
               <div className="text-3xl font-bold text-yellow-300">24/7</div>
-              <div className="text-sm text-blue-100">Suporte</div>
+              <div className="text-sm text-blue-100">Support</div>
             </div>
           </div>
         </div>
