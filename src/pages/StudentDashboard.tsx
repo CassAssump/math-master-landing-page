@@ -27,10 +27,10 @@ interface Profile {
 const StudentDashboard = () => {
   const { user, signOut, loading } = useAuth();
   const [profile, setProfile] = useState<Profile | null>(null);
-  const [activeTab, setActiveTab] = useState("inicio");
-  const overallProgress = 65; // 65% do curso completo
+  const [activeTab, setActiveTab] = useState("home");
+  const overallProgress = 65; // 65% of course completed
   
-  // Redirecionar se não estiver logado
+  // Redirect if not logged in
   if (!loading && !user) {
     return <Navigate to="/login" replace />;
   }
@@ -51,7 +51,7 @@ const StudentDashboard = () => {
       
       setProfile(data);
     } catch (error) {
-      console.error('Erro ao buscar perfil:', error);
+      console.error('Error fetching profile:', error);
     }
   };
 
@@ -60,52 +60,52 @@ const StudentDashboard = () => {
   };
   
   const menuItems = [
-    { title: "Início", icon: Home, value: "inicio", isActive: activeTab === "inicio" },
-    { title: "Meus Cursos", icon: BookOpen, value: "cursos", isActive: activeTab === "cursos" },
-    { title: "Progresso", icon: BarChart3, value: "progresso", isActive: activeTab === "progresso" },
-    { title: "Dúvidas", icon: HelpCircle, value: "duvidas", isActive: activeTab === "duvidas" },
+    { title: "Home", icon: Home, value: "home", isActive: activeTab === "home" },
+    { title: "My Courses", icon: BookOpen, value: "courses", isActive: activeTab === "courses" },
+    { title: "Progress", icon: BarChart3, value: "progress", isActive: activeTab === "progress" },
+    { title: "Questions", icon: HelpCircle, value: "questions", isActive: activeTab === "questions" },
   ];
 
   const courseModules = [
     {
       id: 1,
-      title: "Números Naturais",
-      description: "Aprenda sobre números naturais, operações básicas e propriedades",
+      title: "Natural Numbers",
+      description: "Learn about natural numbers, basic operations and properties",
       status: "completed",
       progress: 100
     },
     {
       id: 2,
-      title: "Frações",
-      description: "Compreenda frações, operações e simplificações",
+      title: "Fractions",
+      description: "Understand fractions, operations and simplifications",
       status: "completed",
       progress: 100
     },
     {
       id: 3,
-      title: "Decimais",
-      description: "Trabalhe com números decimais e suas aplicações",
+      title: "Decimals",
+      description: "Work with decimal numbers and their applications",
       status: "in-progress",
       progress: 60
     },
     {
       id: 4,
-      title: "Porcentagem",
-      description: "Calcule porcentagens e resolva problemas do cotidiano",
+      title: "Percentage",
+      description: "Calculate percentages and solve everyday problems",
       status: "not-started",
       progress: 0
     },
     {
       id: 5,
-      title: "Equações do 1º Grau",
-      description: "Resolva equações lineares e sistemas simples",
+      title: "1st Degree Equations",
+      description: "Solve linear equations and simple systems",
       status: "not-started",
       progress: 0
     },
     {
       id: 6,
-      title: "Geometria Básica",
-      description: "Formas geométricas, perímetro e área",
+      title: "Basic Geometry",
+      description: "Geometric shapes, perimeter and area",
       status: "not-started",
       progress: 0
     }
@@ -125,11 +125,11 @@ const StudentDashboard = () => {
   const getStatusText = (status: string) => {
     switch (status) {
       case "completed":
-        return "Revisar Conteúdo";
+        return "Review Content";
       case "in-progress":
-        return "Continuar Aula";
+        return "Continue Lesson";
       default:
-        return "Assistir Aula";
+        return "Watch Lesson";
     }
   };
 
@@ -144,14 +144,14 @@ const StudentDashboard = () => {
     }
   };
 
-  const studentName = profile?.full_name?.split(' ')[0] || "Aluno";
+  const studentName = profile?.full_name?.split(' ')[0] || "Student";
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-math-blue-700 mx-auto"></div>
-          <p className="mt-2 text-gray-600">Carregando...</p>
+          <p className="mt-2 text-gray-600">Loading...</p>
         </div>
       </div>
     );
@@ -163,7 +163,7 @@ const StudentDashboard = () => {
         <Sidebar className="border-r bg-white">
           <SidebarHeader className="border-b p-4">
             <h2 className="text-lg font-semibold text-math-blue-700">
-              Dashboard do Aluno
+              Student Dashboard
             </h2>
           </SidebarHeader>
           
@@ -187,7 +187,7 @@ const StudentDashboard = () => {
                   <SidebarMenuButton asChild className="w-full justify-start">
                     <Link to="/perfil">
                       <User className="h-4 w-4" />
-                      <span>Meu Perfil</span>
+                      <span>My Profile</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -198,7 +198,7 @@ const StudentDashboard = () => {
                     className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
                   >
                     <LogOut className="h-4 w-4" />
-                    <span>Sair</span>
+                    <span>Sign Out</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               </div>
@@ -211,44 +211,44 @@ const StudentDashboard = () => {
             <SidebarTrigger className="-ml-1" />
             <div className="flex-1">
               <h1 className="text-2xl font-bold text-gray-900">
-                Olá, {studentName}! 👋
+                Hello, {studentName}! 👋
               </h1>
-              <p className="text-gray-600">Bem-vindo de volta ao seu curso de matemática</p>
+              <p className="text-gray-600">Welcome back to your mathematics course</p>
             </div>
           </header>
 
           <main className="flex-1 p-6">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <TabsList className="hidden">
-                <TabsTrigger value="inicio">Início</TabsTrigger>
-                <TabsTrigger value="cursos">Meus Cursos</TabsTrigger>
-                <TabsTrigger value="progresso">Progresso</TabsTrigger>
-                <TabsTrigger value="duvidas">Dúvidas</TabsTrigger>
+                <TabsTrigger value="home">Home</TabsTrigger>
+                <TabsTrigger value="courses">My Courses</TabsTrigger>
+                <TabsTrigger value="progress">Progress</TabsTrigger>
+                <TabsTrigger value="questions">Questions</TabsTrigger>
               </TabsList>
 
-              <TabsContent value="inicio" className="space-y-6">
-                {/* Progresso Atual */}
+              <TabsContent value="home" className="space-y-6">
+                {/* Current Progress */}
                 <Card>
                   <CardHeader>
-                    <CardTitle className="text-xl">Seu Progresso Atual</CardTitle>
+                    <CardTitle className="text-xl">Your Current Progress</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Progresso do Curso</span>
+                      <span className="text-sm text-gray-600">Course Progress</span>
                       <span className="font-semibold text-math-blue-700">{overallProgress}%</span>
                     </div>
                     <Progress value={overallProgress} className="h-3" />
                     <p className="text-sm text-gray-600">
-                      Você concluiu {Math.round(overallProgress/100 * courseModules.length)} de {courseModules.length} módulos
+                      You have completed {Math.round(overallProgress/100 * courseModules.length)} of {courseModules.length} modules
                     </p>
                     <Button className="bg-math-blue-700 hover:bg-math-blue-800">
-                      Continuar de onde parei
+                      Continue where I left off
                     </Button>
                   </CardContent>
                 </Card>
 
                 <div>
-                  <h2 className="text-xl font-bold mb-4">Módulos do Curso</h2>
+                  <h2 className="text-xl font-bold mb-4">Course Modules</h2>
                   <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     {courseModules.map((module) => (
                       <Card key={module.id} className="hover:shadow-md transition-shadow">
@@ -266,7 +266,7 @@ const StudentDashboard = () => {
                           {module.status === "in-progress" && (
                             <div className="space-y-2">
                               <div className="flex justify-between text-sm">
-                                <span>Progresso</span>
+                                <span>Progress</span>
                                 <span>{module.progress}%</span>
                               </div>
                               <Progress value={module.progress} className="h-2" />
@@ -287,55 +287,55 @@ const StudentDashboard = () => {
                 </div>
               </TabsContent>
 
-              <TabsContent value="cursos" className="space-y-6">
+              <TabsContent value="courses" className="space-y-6">
                 <div>
-                  <h2 className="text-2xl font-bold mb-2">Meus Cursos</h2>
-                  <p className="text-gray-600 mb-6">Gerencie e acesse todos os seus cursos de matemática</p>
+                  <h2 className="text-2xl font-bold mb-2">My Courses</h2>
+                  <p className="text-gray-600 mb-6">Manage and access all your mathematics courses</p>
                   
                   <div className="grid gap-6 md:grid-cols-2">
                     <Card className="border-2 border-math-blue-200">
                       <CardHeader>
                         <div className="flex items-center justify-between">
                           <div>
-                            <CardTitle className="text-xl text-math-blue-700">Matemática Básica</CardTitle>
-                            <p className="text-sm text-gray-600 mt-1">Curso Atual</p>
+                            <CardTitle className="text-xl text-math-blue-700">Basic Mathematics</CardTitle>
+                            <p className="text-sm text-gray-600 mt-1">Current Course</p>
                           </div>
                           <div className="text-right">
                             <div className="text-2xl font-bold text-math-blue-700">{overallProgress}%</div>
-                            <div className="text-xs text-gray-500">Concluído</div>
+                            <div className="text-xs text-gray-500">Completed</div>
                           </div>
                         </div>
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <Progress value={overallProgress} className="h-2" />
                         <div className="flex justify-between text-sm text-gray-600">
-                          <span>4 de 6 módulos concluídos</span>
-                          <span>~15h restantes</span>
+                          <span>4 of 6 modules completed</span>
+                          <span>~15h remaining</span>
                         </div>
                         <Button className="w-full bg-math-blue-700 hover:bg-math-blue-800">
-                          Continuar Curso
+                          Continue Course
                         </Button>
                       </CardContent>
                     </Card>
 
                     <Card className="border-dashed border-2 border-gray-300">
                       <CardHeader>
-                        <CardTitle className="text-xl text-gray-500">Próximo Curso</CardTitle>
-                        <p className="text-sm text-gray-400">Matemática Intermediária</p>
+                        <CardTitle className="text-xl text-gray-500">Next Course</CardTitle>
+                        <p className="text-sm text-gray-400">Intermediate Mathematics</p>
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <p className="text-sm text-gray-500">
-                          Disponível após concluir o curso atual
+                          Available after completing current course
                         </p>
                         <Button variant="outline" disabled className="w-full">
-                          Bloqueado
+                          Locked
                         </Button>
                       </CardContent>
                     </Card>
                   </div>
 
                   <div className="mt-8">
-                    <h3 className="text-lg font-semibold mb-4">Módulos Detalhados</h3>
+                    <h3 className="text-lg font-semibold mb-4">Detailed Modules</h3>
                     <div className="space-y-3">
                       {courseModules.map((module, index) => (
                         <Card key={module.id} className="hover:shadow-sm transition-shadow">
@@ -374,30 +374,30 @@ const StudentDashboard = () => {
                 </div>
               </TabsContent>
 
-              <TabsContent value="progresso" className="space-y-6">
+              <TabsContent value="progress" className="space-y-6">
                 <div>
-                  <h2 className="text-2xl font-bold mb-2">Meu Progresso</h2>
-                  <p className="text-gray-600 mb-6">Acompanhe seu desenvolvimento e conquistas</p>
+                  <h2 className="text-2xl font-bold mb-2">My Progress</h2>
+                  <p className="text-gray-600 mb-6">Track your development and achievements</p>
                   
                   <div className="grid gap-6 md:grid-cols-3 mb-8">
                     <Card>
                       <CardContent className="p-6 text-center">
                         <div className="text-3xl font-bold text-math-blue-700 mb-2">{overallProgress}%</div>
-                        <div className="text-sm text-gray-600">Curso Concluído</div>
+                        <div className="text-sm text-gray-600">Course Completed</div>
                       </CardContent>
                     </Card>
                     
                     <Card>
                       <CardContent className="p-6 text-center">
                         <div className="text-3xl font-bold text-green-600 mb-2">25</div>
-                        <div className="text-sm text-gray-600">Horas Estudadas</div>
+                        <div className="text-sm text-gray-600">Hours Studied</div>
                       </CardContent>
                     </Card>
                     
                     <Card>
                       <CardContent className="p-6 text-center">
                         <div className="text-3xl font-bold text-purple-600 mb-2">8</div>
-                        <div className="text-sm text-gray-600">Dias Consecutivos</div>
+                        <div className="text-sm text-gray-600">Consecutive Days</div>
                       </CardContent>
                     </Card>
                   </div>
@@ -405,7 +405,7 @@ const StudentDashboard = () => {
                   <div className="grid gap-6 md:grid-cols-2">
                     <Card>
                       <CardHeader>
-                        <CardTitle className="text-lg">Progresso por Módulo</CardTitle>
+                        <CardTitle className="text-lg">Progress by Module</CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-4">
                         {courseModules.map((module) => (
@@ -422,7 +422,7 @@ const StudentDashboard = () => {
 
                     <Card>
                       <CardHeader>
-                        <CardTitle className="text-lg">Conquistas Recentes</CardTitle>
+                        <CardTitle className="text-lg">Recent Achievements</CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <div className="flex items-center space-x-3">
@@ -430,8 +430,8 @@ const StudentDashboard = () => {
                             <CheckCircle className="h-5 w-5 text-green-600" />
                           </div>
                           <div>
-                            <div className="font-medium">Módulo Concluído!</div>
-                            <div className="text-sm text-gray-600">Frações - Concluído hoje</div>
+                            <div className="font-medium">Module Completed!</div>
+                            <div className="text-sm text-gray-600">Fractions - Completed today</div>
                           </div>
                         </div>
                         
@@ -440,8 +440,8 @@ const StudentDashboard = () => {
                             <Clock className="h-5 w-5 text-blue-600" />
                           </div>
                           <div>
-                            <div className="font-medium">Meta Diária</div>
-                            <div className="text-sm text-gray-600">1 hora de estudo - 8 dias consecutivos</div>
+                            <div className="font-medium">Daily Goal</div>
+                            <div className="text-sm text-gray-600">1 hour of study - 8 consecutive days</div>
                           </div>
                         </div>
                         
@@ -450,8 +450,8 @@ const StudentDashboard = () => {
                             <BarChart3 className="h-5 w-5 text-purple-600" />
                           </div>
                           <div>
-                            <div className="font-medium">Progresso Consistente</div>
-                            <div className="text-sm text-gray-600">50% do curso concluído</div>
+                            <div className="font-medium">Consistent Progress</div>
+                            <div className="text-sm text-gray-600">50% of course completed</div>
                           </div>
                         </div>
                       </CardContent>
@@ -460,26 +460,26 @@ const StudentDashboard = () => {
                 </div>
               </TabsContent>
 
-              <TabsContent value="duvidas" className="space-y-6">
+              <TabsContent value="questions" className="space-y-6">
                 <div>
-                  <h2 className="text-2xl font-bold mb-2">Central de Dúvidas</h2>
-                  <p className="text-gray-600 mb-6">Tire suas dúvidas e obtenha ajuda com o conteúdo</p>
+                  <h2 className="text-2xl font-bold mb-2">Support Center</h2>
+                  <p className="text-gray-600 mb-6">Ask questions and get help with the content</p>
                   
                   <div className="grid gap-6 md:grid-cols-2 mb-8">
                     <Card>
                       <CardHeader>
                         <CardTitle className="text-lg flex items-center gap-2">
                           <MessageSquare className="h-5 w-5" />
-                          Fazer uma Pergunta
+                          Ask a Question
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <p className="text-sm text-gray-600">
-                          Tem alguma dúvida sobre o conteúdo? Nossa IA está aqui para ajudar!
+                          Have any questions about the content? Our AI is here to help!
                         </p>
                         <Button className="w-full bg-math-blue-700 hover:bg-math-blue-800">
                           <MessageSquare className="h-4 w-4 mr-2" />
-                          Conversar com IA
+                          Chat with AI
                         </Button>
                       </CardContent>
                     </Card>
@@ -488,16 +488,16 @@ const StudentDashboard = () => {
                       <CardHeader>
                         <CardTitle className="text-lg flex items-center gap-2">
                           <HelpCircle className="h-5 w-5" />
-                          FAQ - Perguntas Frequentes
+                          FAQ - Frequently Asked Questions
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <p className="text-sm text-gray-600">
-                          Consulte as perguntas mais comuns sobre o curso
+                          Check the most common questions about the course
                         </p>
                         <Button variant="outline" className="w-full">
                           <HelpCircle className="h-4 w-4 mr-2" />
-                          Ver FAQ
+                          View FAQ
                         </Button>
                       </CardContent>
                     </Card>
@@ -505,47 +505,47 @@ const StudentDashboard = () => {
 
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-lg">Dúvidas Recentes</CardTitle>
+                      <CardTitle className="text-lg">Recent Questions</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div className="space-y-4">
                         <div className="border-l-4 border-math-blue-200 pl-4 py-2">
-                          <div className="font-medium text-sm">Como resolver frações com denominadores diferentes?</div>
-                          <div className="text-xs text-gray-600 mt-1">Perguntado em: Módulo Frações • 2 dias atrás</div>
+                          <div className="font-medium text-sm">How to solve fractions with different denominators?</div>
+                          <div className="text-xs text-gray-600 mt-1">Asked in: Fractions Module • 2 days ago</div>
                           <div className="text-sm text-gray-700 mt-2">
-                            Para somar frações com denominadores diferentes, você precisa encontrar o MMC...
+                            To add fractions with different denominators, you need to find the LCM...
                           </div>
                           <Button variant="link" className="p-0 h-auto text-math-blue-700 text-sm">
-                            Ver resposta completa
+                            View complete answer
                           </Button>
                         </div>
 
                         <div className="border-l-4 border-green-200 pl-4 py-2">
-                          <div className="font-medium text-sm">Qual a diferença entre números decimais e frações?</div>
-                          <div className="text-xs text-gray-600 mt-1">Perguntado em: Módulo Decimais • 5 dias atrás</div>
+                          <div className="font-medium text-sm">What's the difference between decimal numbers and fractions?</div>
+                          <div className="text-xs text-gray-600 mt-1">Asked in: Decimals Module • 5 days ago</div>
                           <div className="text-sm text-gray-700 mt-2">
-                            Números decimais e frações são formas diferentes de representar a mesma coisa...
+                            Decimal numbers and fractions are different ways of representing the same thing...
                           </div>
                           <Button variant="link" className="p-0 h-auto text-math-blue-700 text-sm">
-                            Ver resposta completa
+                            View complete answer
                           </Button>
                         </div>
 
                         <div className="border-l-4 border-yellow-200 pl-4 py-2">
-                          <div className="font-medium text-sm">Como calcular porcentagem de desconto?</div>
-                          <div className="text-xs text-gray-600 mt-1">Perguntado em: Módulo Porcentagem • 1 semana atrás</div>
+                          <div className="font-medium text-sm">How to calculate discount percentage?</div>
+                          <div className="text-xs text-gray-600 mt-1">Asked in: Percentage Module • 1 week ago</div>
                           <div className="text-sm text-gray-700 mt-2">
-                            Para calcular desconto, você pode usar a fórmula: Valor original × (desconto/100)...
+                            To calculate discount, you can use the formula: Original value × (discount/100)...
                           </div>
                           <Button variant="link" className="p-0 h-auto text-math-blue-700 text-sm">
-                            Ver resposta completa
+                            View complete answer
                           </Button>
                         </div>
                       </div>
 
                       <div className="pt-4 border-t">
                         <Button variant="outline" className="w-full">
-                          Ver todas as dúvidas
+                          View all questions
                         </Button>
                       </div>
                     </CardContent>
