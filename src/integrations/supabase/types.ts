@@ -9,6 +9,41 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      admin_sessions: {
+        Row: {
+          admin_user_id: string
+          created_at: string
+          expires_at: string
+          id: string
+          last_accessed_at: string
+          session_token: string
+        }
+        Insert: {
+          admin_user_id: string
+          created_at?: string
+          expires_at: string
+          id?: string
+          last_accessed_at?: string
+          session_token: string
+        }
+        Update: {
+          admin_user_id?: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          last_accessed_at?: string
+          session_token?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "admin_sessions_admin_user_id_fkey"
+            columns: ["admin_user_id"]
+            isOneToOne: false
+            referencedRelation: "admin_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       admin_users: {
         Row: {
           created_at: string
@@ -16,6 +51,9 @@ export type Database = {
           full_name: string
           id: string
           password_hash: string
+          salt: string | null
+          session_expires_at: string | null
+          session_token: string | null
           updated_at: string
         }
         Insert: {
@@ -24,6 +62,9 @@ export type Database = {
           full_name: string
           id?: string
           password_hash: string
+          salt?: string | null
+          session_expires_at?: string | null
+          session_token?: string | null
           updated_at?: string
         }
         Update: {
@@ -32,6 +73,9 @@ export type Database = {
           full_name?: string
           id?: string
           password_hash?: string
+          salt?: string | null
+          session_expires_at?: string | null
+          session_token?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -42,6 +86,7 @@ export type Database = {
           email: string | null
           full_name: string | null
           id: string
+          role: string | null
           updated_at: string
         }
         Insert: {
@@ -49,6 +94,7 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id: string
+          role?: string | null
           updated_at?: string
         }
         Update: {
@@ -56,6 +102,7 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id?: string
+          role?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -113,9 +160,43 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      create_admin_session: {
+        Args: { user_email: string; token: string }
+        Returns: string
+      }
+      destroy_admin_session: {
+        Args: { token: string }
+        Returns: boolean
+      }
+      get_admin_user: {
+        Args: { user_email: string }
+        Returns: {
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          password_hash: string
+          salt: string | null
+          session_expires_at: string | null
+          session_token: string | null
+          updated_at: string
+        }[]
+      }
+      is_admin_user: {
+        Args: { user_email: string }
+        Returns: boolean
+      }
       update_user_count: {
         Args: Record<PropertyKey, never>
         Returns: undefined
+      }
+      validate_admin_session: {
+        Args: { token: string }
+        Returns: {
+          admin_id: string
+          email: string
+          full_name: string
+        }[]
       }
     }
     Enums: {

@@ -6,12 +6,10 @@ import TopicsSection from "@/components/TopicsSection";
 import TestimonialSection from "@/components/TestimonialSection";
 import Footer from "@/components/Footer";
 import FloatingChatButton from "@/components/FloatingChatButton";
-import { AdminDemo } from "@/components/AdminDemo";
 
 const Index = () => {
   return (
     <div className="min-h-screen">
-      <AdminDemo />
       <Header />
       <HeroSection />
       <BenefitsSection />
