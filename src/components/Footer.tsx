@@ -1,6 +1,6 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   const handlePurchase = () => {
@@ -210,8 +210,8 @@ const Footer = () => {
               © 2024 MathFácil. All rights reserved.
             </div>
             <div className="flex space-x-6 text-sm text-gray-400">
-              <a href="#" className="hover:text-white transition-colors">Terms of Use</a>
-              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+              <Link to="/terms-of-use" className="hover:text-white transition-colors">Terms of Use</Link>
+              <Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
               <a href="#" className="hover:text-white transition-colors">Refund Policy</a>
             </div>
           </div>

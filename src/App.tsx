@@ -16,6 +16,8 @@ import AdminLogin from "./pages/AdminLogin";
 import AdminDashboard from "./pages/AdminDashboard";
 import SecureAdminLogin from "./pages/SecureAdminLogin";
 import SecureAdminDashboard from "./pages/SecureAdminDashboard";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfUse from "./pages/TermsOfUse";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,6 +37,8 @@ const App = () => (
                 <Route path="/dashboard" element={<StudentDashboard />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/perfil" element={<Profile />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/terms-of-use" element={<TermsOfUse />} />
                 
                 {/* Legacy admin routes (insecure) */}
                 <Route path="/admin/login" element={<AdminLogin />} />
